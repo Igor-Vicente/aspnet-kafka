@@ -12,7 +12,7 @@ namespace Kafka.Producer.Api.Controllers
     public class CustomersController : ControllerBase
     {
         private readonly IKafkaProducer<Null, string> _producer;
-        private readonly string _topic = "frivolous_topic";
+        private readonly string _topic;
         private readonly ILogger<CustomersController> _logger;
 
         public CustomersController(IKafkaProducer<Null, string> producer,
