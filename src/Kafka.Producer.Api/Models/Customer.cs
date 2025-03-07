@@ -7,6 +7,11 @@ namespace Kafka.Producer.Api.Models
         public string Name { get; set; }
         public bool Active { get; set; }
 
+        public Customer(string name)
+        {
+            Name = name;
+        }
+
         public override bool IsValid()
         {
             ValidationResult = new CustomerValidator().Validate(this);

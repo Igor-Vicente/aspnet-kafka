@@ -7,7 +7,7 @@ namespace Kafka.Producer.Api.Configuration
         public static IServiceCollection AddDependencyInjection(this IServiceCollection services)
         {
             services.AddSingleton<KafkaClientHandle>();
-            services.AddSingleton<KafkaDependentProducer<Null, string>>();
+            services.AddSingleton<IKafkaProducer<Null, string>, KafkaDependentProducer<Null, string>>();
 
             return services;
         }

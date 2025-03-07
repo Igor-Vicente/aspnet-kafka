@@ -11,11 +11,11 @@ namespace Kafka.Producer.Api.Controllers
     [Route("api/v1/customer")]
     public class CustomersController : ControllerBase
     {
-        private readonly KafkaDependentProducer<Null, string> _producer;
+        private readonly IKafkaProducer<Null, string> _producer;
         private readonly string _topic = "frivolous_topic";
         private readonly ILogger<CustomersController> _logger;
 
-        public CustomersController(KafkaDependentProducer<Null, string> producer,
+        public CustomersController(IKafkaProducer<Null, string> producer,
                                    IConfiguration configuration,
                                    ILogger<CustomersController> logger)
         {
@@ -25,9 +25,9 @@ namespace Kafka.Producer.Api.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateCustomer(CreateCustomerDto model)
+        public async Task<IActionResult> CreateCustomerAsync(CreateCustomerDto model)
         {
-            var customer = new Customer() { Name = model.Name };
+            var customer = new Customer(model.Name);
             if (!customer.IsValid()) return BadRequest(customer.ValidationResult);
 
             var customerJson = JsonSerializer.Serialize(customer);

@@ -2,7 +2,14 @@
 
 namespace Kafka.Producer.Api.Configuration
 {
-    public class KafkaDependentProducer<K, V>
+    public interface IKafkaProducer<K, V>
+    {
+        Task ProduceAsync(string topic, Message<K, V> message);
+        void Produce(string topic, Message<K, V> message, Action<DeliveryReport<K, V>> deliveryHandler = null);
+        void Flush(TimeSpan timeout);
+    }
+
+    public class KafkaDependentProducer<K, V> : IKafkaProducer<K, V>
     {
         private readonly IProducer<K, V> _kafkaHandle;
 
