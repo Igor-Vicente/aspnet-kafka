@@ -1,5 +1,40 @@
 version: "3.8"
 services:
+
+  producer: 
+    container_name: kafka-producer-api
+    build: 
+      context: ../src/Kafka.Producer.Api
+      dockerfile: ./Dockerfile
+    restart: always
+    environment:
+      - ASPNETCORE_URLS=http://+:90
+      - ASPNETCORE_ENVIRONMENT=Development
+      - kafka__ProducerSettings__BootstrapServers=broker:29092
+    ports:
+      - "8090:90"
+    networks:
+      - kafka-network
+    depends_on:
+      - broker
+
+  consumer: 
+    container_name: kafka-consumer-api
+    build: 
+      context: ../src/Kafka.Consumer.Api
+      dockerfile: ./Dockerfile
+    restart: always
+    environment:
+      - ASPNETCORE_URLS=http://+:70
+      - ASPNETCORE_ENVIRONMENT=Development
+      - kafka__ConsumerSettings__BootstrapServers=broker:29092
+    ports:
+      - "8070:70"
+    networks:
+      - kafka-network
+    depends_on:
+      - broker
+
   zookeeper:
     image: confluentinc/cp-zookeeper:7.4.0
     container_name: zookeeper
@@ -26,7 +61,7 @@ services:
       KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
       KAFKA_ADVERTISED_LISTENERS: "PLAINTEXT://broker:29092,PLAINTEXT_HOST://localhost:9092"
       KAFKA_LISTENERS: "PLAINTEXT://broker:29092,PLAINTEXT_HOST://0.0.0.0:9092"
-      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1 #qtd topicos (internos do kafka) usados para rastrear 'offsets' consumidos por grupos de consumo
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
 
   schema-registry:
     image: confluentinc/cp-schema-registry:7.4.0

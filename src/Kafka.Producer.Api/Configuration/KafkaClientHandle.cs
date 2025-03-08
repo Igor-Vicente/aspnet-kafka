@@ -1,4 +1,5 @@
 ﻿using Confluent.Kafka;
+using System.Text.Json;
 
 namespace Kafka.Producer.Api.Configuration
 {
@@ -10,6 +11,7 @@ namespace Kafka.Producer.Api.Configuration
         {
             var producerConfig = new ProducerConfig();
             config.GetSection("Kafka:ProducerSettings").Bind(producerConfig);
+            Console.WriteLine(JsonSerializer.Serialize(producerConfig));
             _kafkaProducer = new ProducerBuilder<byte[], byte[]>(producerConfig).Build();
         }
 

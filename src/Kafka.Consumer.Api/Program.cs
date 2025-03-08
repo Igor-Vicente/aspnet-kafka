@@ -1,7 +1,7 @@
 
-using Kafka.Producer.Api.Configuration;
+using Kafka.Consumer.Api.Consumers;
 
-namespace Kafka.Producer.Api
+namespace Kafka.Consumer.Api
 {
     public class Program
     {
@@ -9,16 +9,12 @@ namespace Kafka.Producer.Api
         {
             var builder = WebApplication.CreateBuilder(args);
 
-            /*
-             * builder.Services.Configure<ApiBehaviorOptions>(o => o.SuppressModelStateInvalidFilter = true);
-             */
             builder.Services.AddControllers();
-            builder.Services.AddDependencyInjection();
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
+            builder.Services.AddHostedService<CustomersConsumer>();
 
             var app = builder.Build();
-
             app.UseSwagger();
             app.UseSwaggerUI();
             app.UseHttpsRedirection();
